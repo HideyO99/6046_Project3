@@ -10,7 +10,7 @@
 #include "XML/XML.h"
 #include "UI/Sound_UI.h"
 
-#define MAX_CHANNEL 255
+#define MAX_CHANNEL 512
 #define MASTER_CH	"Master"
 #define BGM_CH1		"BGM1"
 #define BGM_CH2		"BGM2"
@@ -74,28 +74,33 @@ int main(int argc, char* argv[])
 	//read XML file
 	xml.readXML();
 
-	result = fmodmanager.set_channel_vol(MASTER_CH, 0.5f);
+	result = fmodmanager.set_channel_vol(MASTER_CH, 1.0f);
 	//result = fmodmanager.create_stream("bgm1", xml.my_music[0], FMOD_LOOP_NORMAL, false);
 	//result = fmodmanager.create_stream("bgm2", xml.my_music[1], FMOD_LOOP_NORMAL, false);
 	//result = fmodmanager.create_stream("bgm3", xml.my_music[2], FMOD_LOOP_NORMAL, false);
-	result = fmodmanager.create_sound("fx1", xml.my_fx_path[0], FMOD_DEFAULT, false);
-	result = fmodmanager.create_sound("fx2", xml.my_fx_path[1], FMOD_DEFAULT, false);
-	result = fmodmanager.create_sound("fx3", xml.my_fx_path[2], FMOD_DEFAULT, false);
-	result = fmodmanager.create_sound("fx4", xml.my_fx_path[3], FMOD_DEFAULT, false);
-	result = fmodmanager.create_sound("fx5", xml.my_fx_path[4], FMOD_DEFAULT, false);
-	result = fmodmanager.create_sound("fx6", xml.my_fx_path[5], FMOD_DEFAULT, false);
-	result = fmodmanager.create_sound("fx7", xml.my_fx_path[6], FMOD_DEFAULT, false);
+	//result = fmodmanager.create_sound("fx1", xml.my_fx_path[0], FMOD_DEFAULT, false);
+	//result = fmodmanager.create_sound("fx2", xml.my_fx_path[1], FMOD_DEFAULT, false);
+	//result = fmodmanager.create_sound("fx3", xml.my_fx_path[2], FMOD_DEFAULT, false);
+	//result = fmodmanager.create_sound("fx4", xml.my_fx_path[3], FMOD_DEFAULT, false);
+	//result = fmodmanager.create_sound("fx5", xml.my_fx_path[4], FMOD_DEFAULT, false);
+	//result = fmodmanager.create_sound("fx6", xml.my_fx_path[5], FMOD_DEFAULT, false);
+	//result = fmodmanager.create_sound("fx7", xml.my_fx_path[6], FMOD_DEFAULT, false);
 	//result = fmodmanager.play_sound("bgm1", BGM_CH1);
 
-	result = fmodmanager.create_dsp(DSP_ECHO			, FMOD_DSP_TYPE_ECHO);
-	result = fmodmanager.create_dsp(DSP_DISTORTION		, FMOD_DSP_TYPE_DISTORTION);
-	result = fmodmanager.create_dsp(DSP_CHORUS			, FMOD_DSP_TYPE_CHORUS);
-	result = fmodmanager.create_dsp(DSP_LOWPASSFILTER	, FMOD_DSP_TYPE_LOWPASS);
-	result = fmodmanager.create_dsp(DSP_HIGHPASSFILTER	, FMOD_DSP_TYPE_HIGHPASS);
-	result = fmodmanager.create_dsp(DSP_FADER			, FMOD_DSP_TYPE_FADER);
-	result = fmodmanager.create_dsp(DSP_PITCHSHIFT		, FMOD_DSP_TYPE_PITCHSHIFT);
-	result = fmodmanager.create_dsp(DSP_FLANGE			, FMOD_DSP_TYPE_FLANGE);
-	result = fmodmanager.create_dsp(DSP_TREMELO			, FMOD_DSP_TYPE_TREMOLO);
+	result = fmodmanager.create_stream_online("Radio01", xml.my_stream_url_path[0], FMOD_CREATESTREAM | FMOD_NONBLOCKING);
+
+	//result = fmodmanager.create_sound("Radio02", xml.my_stream_url_path[1], FMOD_CREATESTREAM | FMOD_NONBLOCKING, false);
+	//result = fmodmanager.create_sound("Radio03", xml.my_stream_url_path[2], FMOD_CREATESTREAM | FMOD_NONBLOCKING, false);
+
+	//result = fmodmanager.create_dsp(DSP_ECHO			, FMOD_DSP_TYPE_ECHO);
+	//result = fmodmanager.create_dsp(DSP_DISTORTION		, FMOD_DSP_TYPE_DISTORTION);
+	//result = fmodmanager.create_dsp(DSP_CHORUS			, FMOD_DSP_TYPE_CHORUS);
+	//result = fmodmanager.create_dsp(DSP_LOWPASSFILTER	, FMOD_DSP_TYPE_LOWPASS);
+	//result = fmodmanager.create_dsp(DSP_HIGHPASSFILTER	, FMOD_DSP_TYPE_HIGHPASS);
+	//result = fmodmanager.create_dsp(DSP_FADER			, FMOD_DSP_TYPE_FADER);
+	//result = fmodmanager.create_dsp(DSP_PITCHSHIFT		, FMOD_DSP_TYPE_PITCHSHIFT);
+	//result = fmodmanager.create_dsp(DSP_FLANGE			, FMOD_DSP_TYPE_FLANGE);
+	//result = fmodmanager.create_dsp(DSP_TREMELO			, FMOD_DSP_TYPE_TREMOLO);
 
 	
 	run();
@@ -188,40 +193,40 @@ static void key_callback(GLFWwindow* window, const int key, int scancode, const 
 		fmodmanager.set_channel_group_enabled(MASTER_CH, !en);
 	}
 
-	if (key == GLFW_KEY_1 && action == GLFW_PRESS)
-	{
-		fmodmanager.play_sound("fx1", FX1_CH);
-	}
+	//if (key == GLFW_KEY_1 && action == GLFW_PRESS)
+	//{
+	//	fmodmanager.play_sound("fx1", FX1_CH);
+	//}
 
-	if (key == GLFW_KEY_2 && action == GLFW_PRESS)
-	{
-		fmodmanager.play_sound("fx2", FX1_CH);
-	}
+	//if (key == GLFW_KEY_2 && action == GLFW_PRESS)
+	//{
+	//	fmodmanager.play_sound("fx2", FX1_CH);
+	//}
 
-	if (key == GLFW_KEY_3 && action == GLFW_PRESS)
-	{
-		fmodmanager.play_sound("fx3", FX1_CH);
-	}
+	//if (key == GLFW_KEY_3 && action == GLFW_PRESS)
+	//{
+	//	fmodmanager.play_sound("fx3", FX1_CH);
+	//}
 
-	if (key == GLFW_KEY_4 && action == GLFW_PRESS)
-	{
-		fmodmanager.play_sound("fx4", FX1_CH);
-	}
+	//if (key == GLFW_KEY_4 && action == GLFW_PRESS)
+	//{
+	//	fmodmanager.play_sound("fx4", FX1_CH);
+	//}
 
-	if (key == GLFW_KEY_5 && action == GLFW_PRESS)
-	{
-		fmodmanager.play_sound("fx5", FX1_CH);
-	}
+	//if (key == GLFW_KEY_5 && action == GLFW_PRESS)
+	//{
+	//	fmodmanager.play_sound("fx5", FX1_CH);
+	//}
 
-	if (key == GLFW_KEY_6 && action == GLFW_PRESS)
-	{
-		fmodmanager.play_sound("fx6", FX1_CH);
-	}
+	//if (key == GLFW_KEY_6 && action == GLFW_PRESS)
+	//{
+	//	fmodmanager.play_sound("fx6", FX1_CH);
+	//}
 
-	if (key == GLFW_KEY_7 && action == GLFW_PRESS)
-	{
-		fmodmanager.play_sound("fx7", FX1_CH);
-	}
+	//if (key == GLFW_KEY_7 && action == GLFW_PRESS)
+	//{
+	//	fmodmanager.play_sound("fx7", FX1_CH);
+	//}
 }
 
 bool init_window()
@@ -232,7 +237,7 @@ bool init_window()
 		return false;
 	}
 
-	window = glfwCreateWindow(800, 600, "Project01", nullptr, nullptr);
+	window = glfwCreateWindow(800, 600, "6046 Media Project03", nullptr, nullptr);
 	if (!window)
 	{
 		glfwTerminate();
@@ -279,6 +284,10 @@ void run()
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
+		fmodmanager.get_open_state("Radio01", &fmodmanager.openstate_, &fmodmanager.percentage_, &fmodmanager.is_starving_);
+		fmodmanager.play_streaming_sound("Radio01", BGM_CH1);
+		//fmodmanager.get_streaming_tag("Radio01", BGM_CH1);
+
 		sound_UI.render();
 
 		ImGui::Render();
@@ -286,6 +295,7 @@ void run()
 
 		//present to the user
 		glfwSwapBuffers(window);
+		fmodmanager.system_->update();
 	}
 
 }

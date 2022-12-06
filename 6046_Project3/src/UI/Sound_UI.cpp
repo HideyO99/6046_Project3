@@ -53,21 +53,23 @@ void Sound_UI::render()
 		ImGui::SameLine();
 		if (ImGui::Button("Load##BGM1"))
 		{
-			fmodmanager_->stop_sound(BGM_CH1);
-			fmodmanager_->stop_sound(BGM_CH2);
-			fmodmanager_->stop_sound(BGM_CH3);
-			fmodmanager_->remove_sound("bgm1");
-			fmodmanager_->create_sound("bgm1", xml_->my_music[0], FMOD_LOOP_NORMAL, iscompress[0]);
-			fmodmanager_->play_sound("bgm1", BGM_CH1);
-			fmodmanager_->get_sound_name("bgm1", &file_name_);
-			fmodmanager_->get_sound_format("bgm1", &file_type_, &file_format_, &channel_, &bps_);
-			fmodmanager_->get_sound_defualt("bgm1", &freq, &priority);
-			freq_original = freq;
-			fmodmanager_->get_sound_lengh("bgm1", &music_length);
-			MStoMinSec(music_length, &music_length_min, &music_length_sec);
-			loading_flag = 1;
+			//fmodmanager_->stop_sound(BGM_CH1);
+			//fmodmanager_->stop_sound(BGM_CH2);
+			//fmodmanager_->stop_sound(BGM_CH3);
+			//fmodmanager_->remove_sound("bgm1");
+			//fmodmanager_->create_sound("bgm1", xml_->my_music[0], FMOD_LOOP_NORMAL, iscompress[0]);
+			//fmodmanager_->play_sound("bgm1", BGM_CH1);
+			//fmodmanager_->get_sound_name("bgm1", &file_name_);
+			//fmodmanager_->get_sound_format("bgm1", &file_type_, &file_format_, &channel_, &bps_);
+			//fmodmanager_->get_sound_defualt("bgm1", &freq, &priority);
+			//freq_original = freq;
+			//fmodmanager_->get_sound_lengh("bgm1", &music_length);
+			//MStoMinSec(music_length, &music_length_min, &music_length_sec);
+			//loading_flag = 1;
 		}
-
+		//fmodmanager_->get_open_state("Radio01", &fmodmanager_->openstate_, &fmodmanager_->percentage_, &fmodmanager_->is_starving_);
+		//fmodmanager_->play_streaming_sound("Radio01", BGM_CH1);
+		//fmodmanager_->get_streaming_tag("Radio01", BGM_CH1);
 	}
 	ImGui::EndChild();
 	ImGui::BeginChild("##BGM2", ImVec2(450, 65), true);
@@ -78,19 +80,19 @@ void Sound_UI::render()
 		ImGui::SameLine();
 		if (ImGui::Button("Load##BGM2"))
 		{	
-			fmodmanager_->stop_sound(BGM_CH1);
-			fmodmanager_->stop_sound(BGM_CH2);
-			fmodmanager_->stop_sound(BGM_CH3);
-			fmodmanager_->remove_sound("bgm2");
-			fmodmanager_->create_sound("bgm2", xml_->my_music[1], FMOD_LOOP_NORMAL, iscompress[1]);
-			fmodmanager_->play_sound("bgm2", BGM_CH2);
-			fmodmanager_->get_sound_name("bgm2", &file_name_);
-			fmodmanager_->get_sound_format("bgm2", &file_type_, &file_format_, &channel_, &bps_);
-			fmodmanager_->get_sound_defualt("bgm2", &freq, &priority);
-			freq_original = freq;
-			fmodmanager_->get_sound_lengh("bgm2", &music_length);
-			MStoMinSec(music_length, &music_length_min, &music_length_sec);
-			loading_flag = 2;
+			//fmodmanager_->stop_sound(BGM_CH1);
+			//fmodmanager_->stop_sound(BGM_CH2);
+			//fmodmanager_->stop_sound(BGM_CH3);
+			//fmodmanager_->remove_sound("bgm2");
+			//fmodmanager_->create_sound("bgm2", xml_->my_music[1], FMOD_LOOP_NORMAL, iscompress[1]);
+			//fmodmanager_->play_sound("bgm2", BGM_CH2);
+			//fmodmanager_->get_sound_name("bgm2", &file_name_);
+			//fmodmanager_->get_sound_format("bgm2", &file_type_, &file_format_, &channel_, &bps_);
+			//fmodmanager_->get_sound_defualt("bgm2", &freq, &priority);
+			//freq_original = freq;
+			//fmodmanager_->get_sound_lengh("bgm2", &music_length);
+			//MStoMinSec(music_length, &music_length_min, &music_length_sec);
+			//loading_flag = 2;
 		}
 
 	}
@@ -103,19 +105,19 @@ void Sound_UI::render()
 		ImGui::SameLine();
 		if (ImGui::Button("Load##BGM3"))
 		{
-			fmodmanager_->stop_sound(BGM_CH1);
-			fmodmanager_->stop_sound(BGM_CH2);
-			fmodmanager_->stop_sound(BGM_CH3);
-			fmodmanager_->remove_sound("bgm3");
-			fmodmanager_->create_sound("bgm3", xml_->my_music[2], FMOD_LOOP_NORMAL, iscompress[2]);
-			fmodmanager_->play_sound("bgm3", BGM_CH3);
-			fmodmanager_->get_sound_name("bgm3", &file_name_);
-			fmodmanager_->get_sound_format("bgm3", &file_type_, &file_format_, &channel_, &bps_);
-			fmodmanager_->get_sound_defualt("bgm3", &freq, &priority);
-			freq_original = freq;
-			fmodmanager_->get_sound_lengh("bgm3", &music_length);
-			MStoMinSec(music_length, &music_length_min, &music_length_sec);
-			loading_flag = 3;
+			//fmodmanager_->stop_sound(BGM_CH1);
+			//fmodmanager_->stop_sound(BGM_CH2);
+			//fmodmanager_->stop_sound(BGM_CH3);
+			//fmodmanager_->remove_sound("bgm3");
+			//fmodmanager_->create_sound("bgm3", xml_->my_music[2], FMOD_LOOP_NORMAL, iscompress[2]);
+			//fmodmanager_->play_sound("bgm3", BGM_CH3);
+			//fmodmanager_->get_sound_name("bgm3", &file_name_);
+			//fmodmanager_->get_sound_format("bgm3", &file_type_, &file_format_, &channel_, &bps_);
+			//fmodmanager_->get_sound_defualt("bgm3", &freq, &priority);
+			//freq_original = freq;
+			//fmodmanager_->get_sound_lengh("bgm3", &music_length);
+			//MStoMinSec(music_length, &music_length_min, &music_length_sec);
+			//loading_flag = 3;
 		}
 
 	}

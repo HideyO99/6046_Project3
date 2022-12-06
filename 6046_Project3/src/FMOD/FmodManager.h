@@ -51,9 +51,11 @@ public:
 
 	bool create_sound(const std::string& Sound_name, const XML::MyMusic path,const int mode, const bool is_compress);
 	bool create_sound(const std::string& Sound_name, const std::string& path, const int mode, const bool iscompress);
+	bool create_stream_online(const std::string& Sound_name, const std::string& path, const int mode);
 	bool create_stream(const std::string& stream_name, const XML::MyMusic path, const int mode, const bool is_compress);
 	bool remove_sound(const std::string& Sound_name);
 	bool play_sound(const std::string& Sound_name, const std::string& CH_name);
+	bool play_streaming_sound(const std::string& Sound_name, const std::string& CH_name);
 	bool stop_sound(const std::string& CH_name);
 	bool get_speed(const std::string& Sound_name, float* speed);
 	bool set_speed(const std::string& Sound_name, float speed);
@@ -61,6 +63,8 @@ public:
 	bool get_sound_format(const std::string& Sound_name, std::string* type, std::string* format,int* chn,int* bit);
 	bool get_sound_defualt(const std::string& Sound_name, float* freq, int* priority);
 	bool get_sound_lengh(const std::string& Sound_name,unsigned int* length);
+	bool get_open_state(const std::string& Sound_name, FMOD_OPENSTATE* openstate, unsigned int* percentage, bool* is_starving);
+	bool get_streaming_tag(const std::string& Sound_name, const std::string& CH_name);
 
 
 	//dsp
@@ -70,14 +74,22 @@ public:
 	bool create_dsp(const std::string& DSP_name, FMOD_DSP_TYPE DSP_type);
 	bool get_dsp(const std::string& DSP_name, FMOD::DSP** dsp);
 	bool get_dsp_param(const std::string& DSP_name, const int index, float* value, char* valuestr, const int valuestrlen);
-	//todo
+
 
 	//bool get_dsp_param(const std::string& DSP_name, const int index, const float* value);
 	bool set_dsp_param(const std::string& DSP_name, const int index, const float value);
 
+	FMOD_TAG tag_;
+	FMOD_OPENSTATE openstate_;
+	unsigned int position_;
+	unsigned int percentage_;
+	bool is_playing_;
+	bool is_paused_;
+	bool is_starving_;
+	FMOD::System* system_;
+
 protected:
 	FMOD_RESULT last_result_;
-	FMOD::System* system_;
 
 	std::map<std::string, CHgroup*> channel_group_;
 	std::map<std::string, FMOD::Sound*> sound_;

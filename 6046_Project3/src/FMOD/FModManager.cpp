@@ -1,9 +1,13 @@
 #include "FmodManager.h"
+#include <Windows.h>
+#include <assert.h>
 
 FModManager::FModManager()
 {
 	last_result_ = FMOD_OK;
 	system_ = nullptr;
+	//tag_ = 0;
+	openstate_ = FMOD_OPENSTATE_READY;
 }
 
 FModManager::~FModManager()
@@ -26,6 +30,17 @@ bool FModManager::Fmod_init(const int num_channel, const int system_flag)
 
 void FModManager::shutdown()
 {
+	do
+	{
+		system_->update();
+		
+		
+		//_result = _sound[0]->getOpenState(&_openstate, nullptr, nullptr, nullptr);
+
+		Sleep(50);
+
+	} while (openstate_ != FMOD_OPENSTATE_READY);
+
 	for (auto i = dsp_.begin(); i != dsp_.end(); ++i)
 	{
 		i->second->release();
@@ -46,6 +61,7 @@ void FModManager::shutdown()
 
 	if (system_)
 	{
+		system_->close();
 		system_->release();
 		system_ = nullptr;
 	}
@@ -286,8 +302,6 @@ bool FModManager::create_sound(const std::string& Sound_name, const XML::MyMusic
 		option |= FMOD_CREATECOMPRESSEDSAMPLE;
 	}
 
-	option = FMOD_CREATESTREAM | FMOD_NONBLOCKING;
-
 	last_result_ = system_->createSound(sel_path.c_str(), option, nullptr, &sound);
 	if (!is_Fmod_ok())
 	{
@@ -323,6 +337,21 @@ bool FModManager::create_sound(const std::string& Sound_name, const std::string&
 
 	sound_.try_emplace(Sound_name, sound); //add to sound map
 
+	return true;
+}
+
+bool FModManager::create_stream_online(const std::string& Sound_name, const std::string& path, const int mode)
+{
+	FMOD::Sound* sound;
+
+	//last_result_ = system_->setStreamBufferSize(64 * 1024, FMOD_TIMEUNIT_RAWBYTES);
+
+	last_result_ = system_->createSound(path.c_str(), mode, nullptr, &sound);
+	if (!is_Fmod_ok())
+	{
+		return false;
+	}
+	sound_.try_emplace(Sound_name, sound);
 	return true;
 }
 
@@ -388,6 +417,32 @@ bool FModManager::play_sound(const std::string& Sound_name, const std::string& C
 	last_result_ = (*channel).setPaused(false);
 
 	return is_Fmod_ok();
+}
+
+bool FModManager::play_streaming_sound(const std::string& Sound_name, const std::string& CH_name)
+{
+	FMOD::Channel* channel = nullptr;
+
+	const auto sound_i = sound_.find(Sound_name);
+	const auto channel_i = channel_group_.find(CH_name);
+
+	if (sound_i == sound_.end() || channel_i == channel_group_.end())
+	{
+		return false;
+	}
+	if (channel_i->second->chn_ptr == NULL)
+	//if(!channel)
+	{
+		//system_->playSound(sound_i->second, channel_i->second->group_ptr, false, &channel);
+		system_->playSound(sound_i->second, nullptr, false, &channel);
+
+		channel_i->second->chn_ptr = channel;
+		//(*channel).setPaused(false);
+
+		return true;
+	}
+
+	return false;
 }
 
 bool FModManager::stop_sound(const std::string& CH_name)
@@ -489,6 +544,78 @@ bool FModManager::get_sound_lengh(const std::string& Sound_name, unsigned int* l
 	last_result_ = sound_i->second->getLength(length, FMOD_TIMEUNIT_MS);
 
 	return is_Fmod_ok();
+}
+
+bool FModManager::get_open_state(const std::string& Sound_name, FMOD_OPENSTATE* openstate, unsigned int* percentage, bool* is_starving)
+{
+	const auto sound_i = sound_.find(Sound_name);
+	if (sound_i == sound_.end())
+	{
+		return false;
+	}
+
+	last_result_ = sound_i->second->getOpenState(openstate, percentage, is_starving, nullptr);
+	
+	if (*openstate == FMOD_OPENSTATE_CONNECTING)
+	{
+		std::cout<<"Connecting..."<<std::endl;
+		std::cout << "openstate = " << *openstate << std::endl;
+		std::cout << "buffer = " << *percentage << std::endl;
+	}
+	else if (*openstate == FMOD_OPENSTATE_BUFFERING)
+	{
+		std::cout << "Buffering..." << std::endl;
+		std::cout << "openstate = " << *openstate << std::endl;
+		std::cout << "buffer = " << *percentage << std::endl;
+	}
+	else if (is_paused_)
+	{
+		std::cout <<"Paused..." << std::endl;
+		std::cout << "openstate = " << *openstate << std::endl;
+		std::cout << "buffer = " << *percentage << std::endl;
+	}
+	else
+	{
+		std::cout << "Playing" << std::endl;
+		std::cout << "openstate = " << *openstate << std::endl;
+		std::cout << "buffer = " << *percentage << std::endl;
+	}
+
+	return is_Fmod_ok();
+}
+
+bool FModManager::get_streaming_tag(const std::string& Sound_name, const std::string& CH_name)
+{
+	FMOD::Channel* channel;
+
+	const auto sound_i = sound_.find(Sound_name);
+	const auto channel_i = channel_group_.find(CH_name);
+
+	if (sound_i == sound_.end() || channel_i == channel_group_.end())
+	{
+		return false;
+	}
+	if (channel_i->second->chn_ptr != NULL)
+	{
+		while (sound_i->second->getTag(nullptr, -1, &tag_) == FMOD_OK)
+		{
+			if (tag_.datatype == FMOD_TAGDATATYPE_STRING)
+			{
+			
+			}
+			else
+			{
+				float freq = *static_cast<float*>(tag_.data);
+				channel_i->second->chn_ptr->setFrequency(freq);
+			}
+		}
+			channel_i->second->chn_ptr->getPaused(&is_paused_);
+			channel_i->second->chn_ptr->isPlaying(&is_playing_);
+			channel_i->second->chn_ptr->getPosition(&position_, FMOD_TIMEUNIT_MS);
+			channel_i->second->chn_ptr->setMute(is_starving_);
+	}
+
+	//return false;
 }
 
 bool FModManager::add_dsp(const std::string& CH_name, const std::string& fx_name)
