@@ -348,19 +348,18 @@ bool FModManager::create_stream_online(const std::string& Sound_name, const std:
 	const auto sound_i = sound_.find(Sound_name);
 	if (sound_i != sound_.end())
 	{
-		sound_i->first.empty();
+		sound_.erase(sound_i);
 	}
-	else
-	{
 
-		last_result_ = system_->createSound(path.c_str(), mode, nullptr, &sound);
-		if (!is_Fmod_ok())
-		{
-			return false;
-		}
-		sound_.try_emplace(Sound_name, sound);
-		return true;
+
+	last_result_ = system_->createSound(path.c_str(), mode, nullptr, &sound);
+	if (!is_Fmod_ok())
+	{
+		return false;
 	}
+	sound_.try_emplace(Sound_name, sound);
+	return true;
+
 }
 
 bool FModManager::create_stream(const std::string& stream_name, const XML::MyMusic path , const int mode, const bool is_compress)
@@ -466,7 +465,7 @@ bool FModManager::stop_sound(const std::string& CH_name)
 	}
 
 	last_result_ = channel_i->second->group_ptr->stop();
-	//channel_i->second->chn_ptr = NULL;
+	channel_i->second->chn_ptr = NULL;
 
 	
 	return is_Fmod_ok();
