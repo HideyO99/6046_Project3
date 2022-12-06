@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 	//read XML file
 	xml.readXML();
 
-	result = fmodmanager.set_channel_vol(MASTER_CH, 1.0f);
+	//result = fmodmanager.set_channel_vol(MASTER_CH, 1.0f);
 	//result = fmodmanager.create_stream("bgm1", xml.my_music[0], FMOD_LOOP_NORMAL, false);
 	//result = fmodmanager.create_stream("bgm2", xml.my_music[1], FMOD_LOOP_NORMAL, false);
 	//result = fmodmanager.create_stream("bgm3", xml.my_music[2], FMOD_LOOP_NORMAL, false);
@@ -88,6 +88,8 @@ int main(int argc, char* argv[])
 	//result = fmodmanager.play_sound("bgm1", BGM_CH1);
 
 	result = fmodmanager.create_stream_online("Radio01", xml.my_stream_url_path[0], FMOD_CREATESTREAM | FMOD_NONBLOCKING);
+	result = fmodmanager.create_stream_online("Radio02", xml.my_stream_url_path[1], FMOD_CREATESTREAM | FMOD_NONBLOCKING);
+	result = fmodmanager.create_stream_online("Radio03", xml.my_stream_url_path[2], FMOD_CREATESTREAM | FMOD_NONBLOCKING);
 
 	//result = fmodmanager.create_sound("Radio02", xml.my_stream_url_path[1], FMOD_CREATESTREAM | FMOD_NONBLOCKING, false);
 	//result = fmodmanager.create_sound("Radio03", xml.my_stream_url_path[2], FMOD_CREATESTREAM | FMOD_NONBLOCKING, false);
@@ -283,10 +285,6 @@ void run()
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-
-		fmodmanager.get_open_state("Radio01", &fmodmanager.openstate_, &fmodmanager.percentage_, &fmodmanager.is_starving_);
-		fmodmanager.play_streaming_sound("Radio01", BGM_CH1);
-		//fmodmanager.get_streaming_tag("Radio01", BGM_CH1);
 
 		sound_UI.render();
 

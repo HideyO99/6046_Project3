@@ -3,9 +3,9 @@
 		<path>http://78.129.202.200:8040</path>
 	</stream_name>
 	<stream_name>
-		<path></path>
+		<path>http://live.rockmelodic-radio.com:8124</path>
 	</stream_name>
 	<stream_name>
-		<path></path>
+		<path>http://82.94.204.105:8070</path>
 	</stream_name>
 </stream>

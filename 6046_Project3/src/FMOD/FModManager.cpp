@@ -30,16 +30,16 @@ bool FModManager::Fmod_init(const int num_channel, const int system_flag)
 
 void FModManager::shutdown()
 {
-	do
-	{
-		system_->update();
-		
-		
-		//_result = _sound[0]->getOpenState(&_openstate, nullptr, nullptr, nullptr);
+	//do
+	//{
+	//	system_->update();
+	//	
+	//	
+	//	//_result = _sound[0]->getOpenState(&_openstate, nullptr, nullptr, nullptr);
 
-		Sleep(50);
+	//	Sleep(50);
 
-	} while (openstate_ != FMOD_OPENSTATE_READY);
+	//} while (openstate_ != FMOD_OPENSTATE_READY);
 
 	for (auto i = dsp_.begin(); i != dsp_.end(); ++i)
 	{
@@ -345,14 +345,22 @@ bool FModManager::create_stream_online(const std::string& Sound_name, const std:
 	FMOD::Sound* sound;
 
 	//last_result_ = system_->setStreamBufferSize(64 * 1024, FMOD_TIMEUNIT_RAWBYTES);
-
-	last_result_ = system_->createSound(path.c_str(), mode, nullptr, &sound);
-	if (!is_Fmod_ok())
+	const auto sound_i = sound_.find(Sound_name);
+	if (sound_i != sound_.end())
 	{
-		return false;
+		sound_i->first.empty();
 	}
-	sound_.try_emplace(Sound_name, sound);
-	return true;
+	else
+	{
+
+		last_result_ = system_->createSound(path.c_str(), mode, nullptr, &sound);
+		if (!is_Fmod_ok())
+		{
+			return false;
+		}
+		sound_.try_emplace(Sound_name, sound);
+		return true;
+	}
 }
 
 bool FModManager::create_stream(const std::string& stream_name, const XML::MyMusic path , const int mode, const bool is_compress)
@@ -433,12 +441,13 @@ bool FModManager::play_streaming_sound(const std::string& Sound_name, const std:
 	if (channel_i->second->chn_ptr == NULL)
 	//if(!channel)
 	{
-		//system_->playSound(sound_i->second, channel_i->second->group_ptr, false, &channel);
-		system_->playSound(sound_i->second, nullptr, false, &channel);
+		system_->playSound(sound_i->second, channel_i->second->group_ptr, false, &channel);
+		//system_->playSound(sound_i->second, nullptr, false, &channel);
 
 		channel_i->second->chn_ptr = channel;
+		//channel_i->second->chn_ptr->setVolume(1.0);
 		//(*channel).setPaused(false);
-
+	
 		return true;
 	}
 
@@ -457,6 +466,8 @@ bool FModManager::stop_sound(const std::string& CH_name)
 	}
 
 	last_result_ = channel_i->second->group_ptr->stop();
+	//channel_i->second->chn_ptr = NULL;
+
 	
 	return is_Fmod_ok();
 }
@@ -655,24 +666,6 @@ bool FModManager::remove_dsp(const std::string& CH_name, const std::string& fx_n
 	return is_Fmod_ok();
 }
 
-//bool FModManager::create_dsp(const std::string& DSP_name, FMOD_DSP_TYPE DSP_type, const float value)
-//{
-//	FMOD::DSP* dsp;
-//	last_result_ = system_->createDSPByType(DSP_type, &dsp);
-//	if (!is_Fmod_ok())
-//	{
-//		return false;
-//	}
-//	
-//	last_result_ = dsp->setParameterFloat(0, value);
-//	if (!is_Fmod_ok())
-//	{
-//		return false;
-//	}
-//	dsp_.try_emplace(DSP_name, dsp);
-//	
-//	return true;
-//}
 bool FModManager::create_dsp(const std::string& DSP_name, FMOD_DSP_TYPE DSP_type)
 {
 	FMOD::DSP* dsp;
@@ -740,6 +733,7 @@ FModManager::CHgroup::CHgroup()
 	current_pan = 0.0f;
 	dsp_pitch = 1.0f;
 	chn_ptr = nullptr;
+	chn_ctrl = nullptr;
 }
 
 const char* FModManager::FmodTypeEnumtoChar(FMOD_SOUND_TYPE t) noexcept

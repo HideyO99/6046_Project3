@@ -19,6 +19,7 @@ public:
 		float current_pan;
 		float dsp_pitch;
 		FMOD::Channel* chn_ptr;
+		FMOD::ChannelControl* chn_ctrl;
 
 		CHgroup();
 	};

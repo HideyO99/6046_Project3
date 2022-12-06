@@ -3,6 +3,10 @@
 FModManager* fmodmanager_;
 XML* xml_;
 
+void load_radio1();
+void load_radio2();
+void load_radio3();
+
 Sound_UI::Sound_UI(FModManager* fmod,XML* a_xml)
 {
 	fmodmanager_ = fmod;
@@ -53,10 +57,11 @@ void Sound_UI::render()
 		ImGui::SameLine();
 		if (ImGui::Button("Load##BGM1"))
 		{
-			//fmodmanager_->stop_sound(BGM_CH1);
-			//fmodmanager_->stop_sound(BGM_CH2);
-			//fmodmanager_->stop_sound(BGM_CH3);
-			//fmodmanager_->remove_sound("bgm1");
+			fmodmanager_->stop_sound(BGM_CH1);
+			fmodmanager_->stop_sound(BGM_CH2);
+			fmodmanager_->stop_sound(BGM_CH3);
+			fmodmanager_->remove_sound("bgm1");
+			fmodmanager_->create_stream_online("Radio01", xml_->my_stream_url_path[0], FMOD_CREATESTREAM | FMOD_NONBLOCKING);
 			//fmodmanager_->create_sound("bgm1", xml_->my_music[0], FMOD_LOOP_NORMAL, iscompress[0]);
 			//fmodmanager_->play_sound("bgm1", BGM_CH1);
 			//fmodmanager_->get_sound_name("bgm1", &file_name_);
@@ -65,7 +70,11 @@ void Sound_UI::render()
 			//freq_original = freq;
 			//fmodmanager_->get_sound_lengh("bgm1", &music_length);
 			//MStoMinSec(music_length, &music_length_min, &music_length_sec);
-			//loading_flag = 1;
+			loading_flag = 1;
+		}
+		if (loading_flag == 1)
+		{
+			load_radio1();
 		}
 		//fmodmanager_->get_open_state("Radio01", &fmodmanager_->openstate_, &fmodmanager_->percentage_, &fmodmanager_->is_starving_);
 		//fmodmanager_->play_streaming_sound("Radio01", BGM_CH1);
@@ -80,10 +89,11 @@ void Sound_UI::render()
 		ImGui::SameLine();
 		if (ImGui::Button("Load##BGM2"))
 		{	
-			//fmodmanager_->stop_sound(BGM_CH1);
-			//fmodmanager_->stop_sound(BGM_CH2);
-			//fmodmanager_->stop_sound(BGM_CH3);
-			//fmodmanager_->remove_sound("bgm2");
+			fmodmanager_->stop_sound(BGM_CH1);
+			fmodmanager_->stop_sound(BGM_CH2);
+			fmodmanager_->stop_sound(BGM_CH3);
+			fmodmanager_->remove_sound("bgm2");
+			fmodmanager_->create_stream_online("Radio02", xml_->my_stream_url_path[1], FMOD_CREATESTREAM | FMOD_NONBLOCKING);
 			//fmodmanager_->create_sound("bgm2", xml_->my_music[1], FMOD_LOOP_NORMAL, iscompress[1]);
 			//fmodmanager_->play_sound("bgm2", BGM_CH2);
 			//fmodmanager_->get_sound_name("bgm2", &file_name_);
@@ -92,9 +102,12 @@ void Sound_UI::render()
 			//freq_original = freq;
 			//fmodmanager_->get_sound_lengh("bgm2", &music_length);
 			//MStoMinSec(music_length, &music_length_min, &music_length_sec);
-			//loading_flag = 2;
+			loading_flag = 2;
 		}
-
+		if (loading_flag == 2)
+		{
+			load_radio2();
+		}
 	}
 	ImGui::EndChild();
 	ImGui::BeginChild("##BGM3", ImVec2(450, 65), true);
@@ -105,10 +118,11 @@ void Sound_UI::render()
 		ImGui::SameLine();
 		if (ImGui::Button("Load##BGM3"))
 		{
-			//fmodmanager_->stop_sound(BGM_CH1);
-			//fmodmanager_->stop_sound(BGM_CH2);
-			//fmodmanager_->stop_sound(BGM_CH3);
-			//fmodmanager_->remove_sound("bgm3");
+			fmodmanager_->stop_sound(BGM_CH1);
+			fmodmanager_->stop_sound(BGM_CH2);
+			fmodmanager_->stop_sound(BGM_CH3);
+			fmodmanager_->remove_sound("bgm3");
+			fmodmanager_->create_stream_online("Radio03", xml_->my_stream_url_path[2], FMOD_CREATESTREAM | FMOD_NONBLOCKING);
 			//fmodmanager_->create_sound("bgm3", xml_->my_music[2], FMOD_LOOP_NORMAL, iscompress[2]);
 			//fmodmanager_->play_sound("bgm3", BGM_CH3);
 			//fmodmanager_->get_sound_name("bgm3", &file_name_);
@@ -117,9 +131,12 @@ void Sound_UI::render()
 			//freq_original = freq;
 			//fmodmanager_->get_sound_lengh("bgm3", &music_length);
 			//MStoMinSec(music_length, &music_length_min, &music_length_sec);
-			//loading_flag = 3;
+			loading_flag = 3;
 		}
-
+		if (loading_flag == 3)
+		{
+			load_radio3();
+		}
 	}
 	ImGui::EndChild();
 	//ImGui::EndGroup();
@@ -298,7 +315,7 @@ void Sound_UI::musicvolume(const char* id, const ImVec2 position, float* curr_mu
 
 	//music pan //todo -> playback speed by freq
 
-	fmodmanager_->get_channel_freq(BGM_CH1, &freq);
+	fmodmanager_->get_channel_freq(BGM_CH1, &freq_original);
 	ImGui::SliderFloat("##music pan", &playspeed, -1.f, 3.0f, "%.2f");
 	ImGui::Text("playback speed");
 	freq = freq_original* playspeed;
@@ -985,5 +1002,22 @@ void Sound_UI::dsptab(const char* id, const ImVec2 position)
 
 	ImGui::EndChild();
 }
-
+void load_radio1()
+{
+	fmodmanager_->get_open_state("Radio01", &fmodmanager_->openstate_, &fmodmanager_->percentage_, &fmodmanager_->is_starving_);
+	fmodmanager_->play_streaming_sound("Radio01", BGM_CH1);
+	fmodmanager_->get_streaming_tag("Radio01", BGM_CH1);
+}
+void load_radio2()
+{
+	fmodmanager_->get_open_state("Radio02", &fmodmanager_->openstate_, &fmodmanager_->percentage_, &fmodmanager_->is_starving_);
+	fmodmanager_->play_streaming_sound("Radio02", BGM_CH2);
+	fmodmanager_->get_streaming_tag("Radio02", BGM_CH2);
+}
+void load_radio3()
+{
+	fmodmanager_->get_open_state("Radio03", &fmodmanager_->openstate_, &fmodmanager_->percentage_, &fmodmanager_->is_starving_);
+	fmodmanager_->play_streaming_sound("Radio03", BGM_CH3);
+	fmodmanager_->get_streaming_tag("Radio03", BGM_CH3);
+}
 
