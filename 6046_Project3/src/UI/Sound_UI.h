@@ -40,7 +40,7 @@ protected:
 	bool MyKnob(const char* label, float* p_value, float v_min, float v_max);
 	void MStoMinSec(const unsigned int ms, unsigned int* min, unsigned int* sec);
 	void mastervolume(const char *id,const ImVec2 position, float* curr_music_volume, float* curr_music_pan);
-	void musicvolume(const char* id, const ImVec2 position, float* curr_music_volume);
+	void musicvolume(const char* id, const ImVec2 position, float* curr_music_volume, const std::string& CH_name);
 	void fxvolume(const char* id, const ImVec2 position);
 	void infotext(const char* id, const ImVec2 position, float* curr_music_volume, float* curr_music_pan);
 	void bgmload(std::string CH_name,std::string id);

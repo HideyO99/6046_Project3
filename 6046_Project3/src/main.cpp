@@ -94,15 +94,15 @@ int main(int argc, char* argv[])
 	//result = fmodmanager.create_sound("Radio02", xml.my_stream_url_path[1], FMOD_CREATESTREAM | FMOD_NONBLOCKING, false);
 	//result = fmodmanager.create_sound("Radio03", xml.my_stream_url_path[2], FMOD_CREATESTREAM | FMOD_NONBLOCKING, false);
 
-	//result = fmodmanager.create_dsp(DSP_ECHO			, FMOD_DSP_TYPE_ECHO);
-	//result = fmodmanager.create_dsp(DSP_DISTORTION		, FMOD_DSP_TYPE_DISTORTION);
-	//result = fmodmanager.create_dsp(DSP_CHORUS			, FMOD_DSP_TYPE_CHORUS);
-	//result = fmodmanager.create_dsp(DSP_LOWPASSFILTER	, FMOD_DSP_TYPE_LOWPASS);
-	//result = fmodmanager.create_dsp(DSP_HIGHPASSFILTER	, FMOD_DSP_TYPE_HIGHPASS);
-	//result = fmodmanager.create_dsp(DSP_FADER			, FMOD_DSP_TYPE_FADER);
-	//result = fmodmanager.create_dsp(DSP_PITCHSHIFT		, FMOD_DSP_TYPE_PITCHSHIFT);
-	//result = fmodmanager.create_dsp(DSP_FLANGE			, FMOD_DSP_TYPE_FLANGE);
-	//result = fmodmanager.create_dsp(DSP_TREMELO			, FMOD_DSP_TYPE_TREMOLO);
+	result = fmodmanager.create_dsp(DSP_ECHO			, FMOD_DSP_TYPE_ECHO);
+	result = fmodmanager.create_dsp(DSP_DISTORTION		, FMOD_DSP_TYPE_DISTORTION);
+	result = fmodmanager.create_dsp(DSP_CHORUS			, FMOD_DSP_TYPE_CHORUS);
+	result = fmodmanager.create_dsp(DSP_LOWPASSFILTER	, FMOD_DSP_TYPE_LOWPASS);
+	result = fmodmanager.create_dsp(DSP_HIGHPASSFILTER	, FMOD_DSP_TYPE_HIGHPASS);
+	result = fmodmanager.create_dsp(DSP_FADER			, FMOD_DSP_TYPE_FADER);
+	result = fmodmanager.create_dsp(DSP_PITCHSHIFT		, FMOD_DSP_TYPE_PITCHSHIFT);
+	result = fmodmanager.create_dsp(DSP_FLANGE			, FMOD_DSP_TYPE_FLANGE);
+	result = fmodmanager.create_dsp(DSP_TREMELO			, FMOD_DSP_TYPE_TREMOLO);
 
 	
 	run();

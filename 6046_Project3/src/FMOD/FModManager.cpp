@@ -30,32 +30,35 @@ bool FModManager::Fmod_init(const int num_channel, const int system_flag)
 
 void FModManager::shutdown()
 {
-	//do
+	//for (std::map<std::string, CHgroup*>::iterator CHG_it = channel_group_.begin(); CHG_it != channel_group_.end(); ++CHG_it)
 	//{
-	//	system_->update();
-	//	
-	//	
-	//	//_result = _sound[0]->getOpenState(&_openstate, nullptr, nullptr, nullptr);
-
-	//	Sleep(50);
-
-	//} while (openstate_ != FMOD_OPENSTATE_READY);
+	//	last_result_ = CHG_it->second->group_ptr->stop();
+	//	for (std::map<std::string, FMOD::Sound*>::iterator Sound_it = sound_.begin(); Sound_it != sound_.end(); ++Sound_it)
+	//	{
+	//		do
+	//		{
+	//			last_result_ = system_->update();
+	//			last_result_ = Sound_it->second->getOpenState(&openstate_, nullptr, nullptr, nullptr);
+	//			Sleep(5);
+	//		} while (openstate_ != FMOD_OPENSTATE_READY);
+	//	}
+	//}
 
 	for (auto i = dsp_.begin(); i != dsp_.end(); ++i)
 	{
-		i->second->release();
+		last_result_ = i->second->release();
 	}
 	dsp_.clear();
 
 	for (auto i = sound_.begin();i!=sound_.end();++i)
 	{
-		i->second->release();
+		last_result_ = i->second->release();
 	}
 	sound_.clear();
 	
 	for (auto i = channel_group_.begin(); i != channel_group_.end(); ++i)
 	{
-		i->second->group_ptr->release();
+		last_result_ = i->second->group_ptr->release();
 	}
 	channel_group_.clear();
 

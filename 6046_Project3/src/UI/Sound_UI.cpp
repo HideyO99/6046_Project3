@@ -46,15 +46,16 @@ void Sound_UI::render()
 	//setup ui structure
 	ImGui::Begin("Audio Settings");
 	ImGui::BeginGroup();
-	ImGui::BeginChild("##BGM1", ImVec2(450, 65),true);
+	ImGui::BeginChild("##BGM1", ImVec2(450, 75),true);
 	
 	
 	{
 		
-		ImGui::Text("BGM1: %s ",xml_->my_music[0].fname.c_str());
+		ImGui::Text("Radio1: %s ",xml_->my_music[0].fname.c_str());
 		ImGui::SameLine();
-		ImGui::Checkbox("compress##CMPSS1", &iscompress[0]);
+		//ImGui::Checkbox("compress##CMPSS1", &iscompress[0]);
 		ImGui::SameLine();
+
 		if (ImGui::Button("Load##BGM1"))
 		{
 			fmodmanager_->stop_sound(BGM_CH1);
@@ -62,6 +63,7 @@ void Sound_UI::render()
 			fmodmanager_->stop_sound(BGM_CH3);
 			fmodmanager_->remove_sound("bgm1");
 			fmodmanager_->create_stream_online("Radio01", xml_->my_stream_url_path[0], FMOD_CREATESTREAM | FMOD_NONBLOCKING);
+			file_name_ = xml_->my_stream_url_path[0];
 			//fmodmanager_->create_sound("bgm1", xml_->my_music[0], FMOD_LOOP_NORMAL, iscompress[0]);
 			//fmodmanager_->play_sound("bgm1", BGM_CH1);
 			//fmodmanager_->get_sound_name("bgm1", &file_name_);
@@ -72,20 +74,21 @@ void Sound_UI::render()
 			//MStoMinSec(music_length, &music_length_min, &music_length_sec);
 			loading_flag = 1;
 		}
+
 		if (loading_flag == 1)
 		{
 			load_radio1();
+			
 		}
-		//fmodmanager_->get_open_state("Radio01", &fmodmanager_->openstate_, &fmodmanager_->percentage_, &fmodmanager_->is_starving_);
-		//fmodmanager_->play_streaming_sound("Radio01", BGM_CH1);
-		//fmodmanager_->get_streaming_tag("Radio01", BGM_CH1);
+		ImGui::SameLine();
+		musicvolume("Music_volume_ctrl1", ImVec2(120, 100), &curr_music_volume, BGM_CH1);
 	}
 	ImGui::EndChild();
-	ImGui::BeginChild("##BGM2", ImVec2(450, 65), true);
+	ImGui::BeginChild("##BGM2", ImVec2(450, 75), true);
 	{
-		ImGui::Text("BGM2: %s ", xml_->my_music[1].fname.c_str());
+		ImGui::Text("Radio2: %s ", xml_->my_music[1].fname.c_str());
 		ImGui::SameLine();
-		ImGui::Checkbox("compress##CMPSS2", &iscompress[1]);
+		//ImGui::Checkbox("compress##CMPSS2", &iscompress[1]);
 		ImGui::SameLine();
 		if (ImGui::Button("Load##BGM2"))
 		{	
@@ -94,6 +97,7 @@ void Sound_UI::render()
 			fmodmanager_->stop_sound(BGM_CH3);
 			fmodmanager_->remove_sound("bgm2");
 			fmodmanager_->create_stream_online("Radio02", xml_->my_stream_url_path[1], FMOD_CREATESTREAM | FMOD_NONBLOCKING);
+			file_name_ = xml_->my_stream_url_path[1];
 			//fmodmanager_->create_sound("bgm2", xml_->my_music[1], FMOD_LOOP_NORMAL, iscompress[1]);
 			//fmodmanager_->play_sound("bgm2", BGM_CH2);
 			//fmodmanager_->get_sound_name("bgm2", &file_name_);
@@ -108,13 +112,15 @@ void Sound_UI::render()
 		{
 			load_radio2();
 		}
+		ImGui::SameLine();
+		musicvolume("Music_volume_ctrl2", ImVec2(120, 100), &curr_music_volume, BGM_CH2);
 	}
 	ImGui::EndChild();
-	ImGui::BeginChild("##BGM3", ImVec2(450, 65), true);
+	ImGui::BeginChild("##BGM3", ImVec2(450, 75), true);
 	{
-		ImGui::Text("BGM3: %s ", xml_->my_music[2].fname.c_str());
+		ImGui::Text("Radio3: %s ", xml_->my_music[2].fname.c_str());
 		ImGui::SameLine();
-		ImGui::Checkbox("compress##CMPSS3", &iscompress[2]);
+		//ImGui::Checkbox("compress##CMPSS3", &iscompress[2]);
 		ImGui::SameLine();
 		if (ImGui::Button("Load##BGM3"))
 		{
@@ -123,6 +129,7 @@ void Sound_UI::render()
 			fmodmanager_->stop_sound(BGM_CH3);
 			fmodmanager_->remove_sound("bgm3");
 			fmodmanager_->create_stream_online("Radio03", xml_->my_stream_url_path[2], FMOD_CREATESTREAM | FMOD_NONBLOCKING);
+			file_name_ = xml_->my_stream_url_path[2];
 			//fmodmanager_->create_sound("bgm3", xml_->my_music[2], FMOD_LOOP_NORMAL, iscompress[2]);
 			//fmodmanager_->play_sound("bgm3", BGM_CH3);
 			//fmodmanager_->get_sound_name("bgm3", &file_name_);
@@ -137,60 +144,62 @@ void Sound_UI::render()
 		{
 			load_radio3();
 		}
+		ImGui::SameLine();
+		musicvolume("Music_volume_ctrl3", ImVec2(120, 100), &curr_music_volume, BGM_CH3);
 	}
 	ImGui::EndChild();
-	//ImGui::EndGroup();
+	ImGui::EndGroup();
 
 	//ImGui::SameLine();
 
 	//DSP tab
 	//dsptab("##dsp-tools", ImVec2(0, 200));
 
-
-	////master volume
-	mastervolume("Master_volume_ctrl", ImVec2(120, 140), &curr_music_volume, &curr_music_pan);
-	
-		ImGui::SameLine();
-	//master pitch
-	{
-		ImGui::BeginChild("Master_pitch_ctrl", ImVec2(100, 140), true);
-		{
-			FModManager::CHgroup* channel_group;
-			if (!fmodmanager_->find_channel_group(MASTER_CH, &channel_group))
-			{
-				//cannot find channel group
-				//do something...
-			}
-
-			float current_pitch;
-			channel_group->group_ptr->getPitch(&current_pitch);
-			ImGui::VSliderFloat("##master pitch (no dsp)", ImVec2(30, 105), &current_pitch, 0.5f, 2.0f, "%.2f");
-			ImGui::Text("master pitch");
-			//ImGui::SliderFloat("master pitch (no dsp)", &current_pitch, 0.5f, 2.0f, "%.2f");
-			channel_group->group_ptr->setPitch(current_pitch);
-		}
-		ImGui::EndChild();
-		//ImGui::EndChild();
-	}
-
 	ImGui::SameLine();
+	////master volume
+	mastervolume("Master_volume_ctrl", ImVec2(120, 230), &curr_music_volume, &curr_music_pan);
+	ImGui::BeginGroup();
+		//ImGui::SameLine();
+	//master pitch
+	//{
+	//	ImGui::BeginChild("Master_pitch_ctrl", ImVec2(100, 140), true);
+	//	{
+	//		FModManager::CHgroup* channel_group;
+	//		if (!fmodmanager_->find_channel_group(MASTER_CH, &channel_group))
+	//		{
+	//			//cannot find channel group
+	//			//do something...
+	//		}
+
+	//		float current_pitch;
+	//		channel_group->group_ptr->getPitch(&current_pitch);
+	//		ImGui::VSliderFloat("##master pitch (no dsp)", ImVec2(30, 105), &current_pitch, 0.5f, 2.0f, "%.2f");
+	//		ImGui::Text("master pitch");
+	//		//ImGui::SliderFloat("master pitch (no dsp)", &current_pitch, 0.5f, 2.0f, "%.2f");
+	//		channel_group->group_ptr->setPitch(current_pitch);
+	//	}
+	//	ImGui::EndChild();
+	//	//ImGui::EndChild();
+	//}
+
+	//ImGui::SameLine();
 
 	//music volume
-	musicvolume("Music_volume_ctrl", ImVec2(120, 140), &curr_music_volume);
+	//musicvolume("Music_volume_ctrl", ImVec2(120, 140), &curr_music_volume, MASTER_CH);
 
-	ImGui::SameLine();
+	//ImGui::SameLine();
 
 	//FX volume
-	fxvolume("FX_volume_ctrl", ImVec2(85, 140));
+	//fxvolume("FX_volume_ctrl", ImVec2(85, 140));
 	ImGui::EndGroup();
 
-	ImGui::SameLine();
+	//ImGui::SameLine();
 
 	//DSP tab
-	dsptab("##dsp-tools", ImVec2(0, 350));
+	dsptab("##dsp-tools", ImVec2(0, 150));
 
 	//info 
-	infotext("##info", ImVec2(0, 150), &curr_music_volume, &curr_music_pan);
+	infotext("##info", ImVec2(0, 100), &curr_music_volume, &curr_music_pan);
 
 	ImGui::End();
 
@@ -287,17 +296,17 @@ void Sound_UI::mastervolume(const char *id, const ImVec2 position,float* curr_mu
 
 }
 
-void Sound_UI::musicvolume(const char* id, const ImVec2 position, float* curr_music_volume)
+void Sound_UI::musicvolume(const char* id, const ImVec2 position, float* curr_music_volume, const std::string& CH_name)
 {
-	ImGui::BeginChild(id, position, true);
+	//ImGui::BeginChild(id, position, true);
 
 	FModManager::CHgroup* channel_group;
 	bool volume_enabled;
 	float current_volume;
 
-	fmodmanager_->find_channel_group(BGM_CH1, &channel_group);
-	fmodmanager_->get_channel_vol(BGM_CH1, &current_volume);	
-	fmodmanager_->get_channel_group_enabled(BGM_CH1, &volume_enabled);
+	fmodmanager_->find_channel_group(CH_name, &channel_group);
+	fmodmanager_->get_channel_vol(CH_name, &current_volume);
+	fmodmanager_->get_channel_group_enabled(CH_name, &volume_enabled);
 
 	current_volume *= 100;
 	if (*curr_music_volume > current_volume)
@@ -305,25 +314,26 @@ void Sound_UI::musicvolume(const char* id, const ImVec2 position, float* curr_mu
 		*curr_music_volume = current_volume;
 	}
 
-	ImGui::Checkbox("enable##music_volume", &volume_enabled);
 	MyKnob("music volume", &current_volume, 0.0f, 100.0f);
+	ImGui::SameLine();
+	ImGui::Checkbox("enable##music_volume", &volume_enabled);
 	//ImGui::SliderFloat("music volume", &current_volume, 0.0f, 100.0f, "%.0f");
 	current_volume /= 100;
 
-	fmodmanager_->set_channel_vol(BGM_CH1, current_volume);
-	fmodmanager_->set_channel_group_enabled(BGM_CH1, volume_enabled);
+	fmodmanager_->set_channel_vol(CH_name, current_volume);
+	fmodmanager_->set_channel_group_enabled(CH_name, volume_enabled);
 
 	//music pan //todo -> playback speed by freq
 
-	fmodmanager_->get_channel_freq(BGM_CH1, &freq_original);
-	ImGui::SliderFloat("##music pan", &playspeed, -1.f, 3.0f, "%.2f");
-	ImGui::Text("playback speed");
+	fmodmanager_->get_channel_freq(CH_name, &freq_original);
+	//ImGui::SliderFloat("##music pan", &playspeed, -1.f, 3.0f, "%.2f");
+	//ImGui::Text("playback speed");
 	freq = freq_original* playspeed;
 
-	fmodmanager_->set_channel_freq(BGM_CH1, freq);
+	fmodmanager_->set_channel_freq(CH_name, freq);
 	
 	
-	ImGui::EndChild();
+	//ImGui::EndChild();
 }
 
 
@@ -373,22 +383,29 @@ void Sound_UI::infotext(const char* id, const ImVec2 position, float* curr_music
 			break;
 		}
 		ImGui::Text("Name: %s", file_name_.c_str());
-		ImGui::Text("Format: %s", file_format_.c_str());
-		ImGui::Text("Type: %s", file_type_.c_str());
-		ImGui::Text("Frequency: %.0f", freq);
-		fmodmanager_->get_playback_pos(curCH, &music_pos);
-		MStoMinSec(music_pos, &music_pos_min, &music_pos_sec);
-		//ImGui::Text("Length: %02d:%02d/%02d:%02d", (int)music_pos_min, (int)music_pos_sec, (int)music_length_min, (int)music_length_sec);
-		ImGui::Text("Length: ");
-		ImGui::SameLine();
-		char buf[32];
-		float progress = 0.f;
-		if (music_length != 0)
+		std::string starving = "\0";
+		if (fmodmanager_->is_starving_)
 		{
-			progress = (float)music_pos / (float)music_length;
+			starving = "starving";
 		}
-		sprintf_s(buf, "%02d:%02d/%02d:%02d", music_pos_min, music_pos_sec, music_length_min, music_length_sec);
-		ImGui::ProgressBar(progress, ImVec2(150, 15), buf);
+		ImGui::Text("Buffer: %d %% %s", fmodmanager_->percentage_, starving.c_str());
+
+		//ImGui::Text("Format: %s", file_format_.c_str());
+		//ImGui::Text("Type: %s", file_type_.c_str());
+		//ImGui::Text("Frequency: %.0f", freq);
+		//fmodmanager_->get_playback_pos(curCH, &music_pos);
+		//MStoMinSec(music_pos, &music_pos_min, &music_pos_sec);
+		//ImGui::Text("Length: %02d:%02d/%02d:%02d", (int)music_pos_min, (int)music_pos_sec, (int)music_length_min, (int)music_length_sec);
+		//ImGui::Text("Length: ");
+		//ImGui::SameLine();
+		//char buf[32];
+		//float progress = 0.f;
+		//if (music_length != 0)
+		//{
+		//	progress = (float)music_pos / (float)music_length;
+		//}
+		//sprintf_s(buf, "%02d:%02d/%02d:%02d", music_pos_min, music_pos_sec, music_length_min, music_length_sec);
+		//ImGui::ProgressBar(progress, ImVec2(150, 15), buf);
 		ImGui::Text("Music Volume: %.02f", *curr_music_volume);
 		ImGui::Text("Music Balance: %.02f", *curr_music_pan);
 	}
