@@ -30,19 +30,6 @@ bool FModManager::Fmod_init(const int num_channel, const int system_flag)
 
 void FModManager::shutdown()
 {
-	//for (std::map<std::string, CHgroup*>::iterator CHG_it = channel_group_.begin(); CHG_it != channel_group_.end(); ++CHG_it)
-	//{
-	//	last_result_ = CHG_it->second->group_ptr->stop();
-	//	for (std::map<std::string, FMOD::Sound*>::iterator Sound_it = sound_.begin(); Sound_it != sound_.end(); ++Sound_it)
-	//	{
-	//		do
-	//		{
-	//			last_result_ = system_->update();
-	//			last_result_ = Sound_it->second->getOpenState(&openstate_, nullptr, nullptr, nullptr);
-	//			Sleep(5);
-	//		} while (openstate_ != FMOD_OPENSTATE_READY);
-	//	}
-	//}
 
 	for (auto i = dsp_.begin(); i != dsp_.end(); ++i)
 	{

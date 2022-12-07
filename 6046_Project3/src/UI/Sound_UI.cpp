@@ -158,7 +158,7 @@ void Sound_UI::render()
 	ImGui::SameLine();
 	////master volume
 	mastervolume("Master_volume_ctrl", ImVec2(120, 230), &curr_music_volume, &curr_music_pan);
-	ImGui::BeginGroup();
+	//ImGui::BeginGroup();
 		//ImGui::SameLine();
 	//master pitch
 	//{
@@ -191,15 +191,15 @@ void Sound_UI::render()
 
 	//FX volume
 	//fxvolume("FX_volume_ctrl", ImVec2(85, 140));
-	ImGui::EndGroup();
+	//ImGui::EndGroup();
 
 	//ImGui::SameLine();
 
 	//DSP tab
-	dsptab("##dsp-tools", ImVec2(0, 150));
+	dsptab("##dsp-tools", ImVec2(0, 187));
 
 	//info 
-	infotext("##info", ImVec2(0, 100), &curr_music_volume, &curr_music_pan);
+	infotext("##info", ImVec2(0, 80), &curr_music_volume, &curr_music_pan);
 
 	ImGui::End();
 
